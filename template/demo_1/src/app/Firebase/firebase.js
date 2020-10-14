@@ -2,14 +2,12 @@ import app from 'firebase/app';
 import 'firebase/auth';
 
 const config = {
-    apiKey: "AIzaSyDuWLHbe79_lXu09-P7PAq3_-TaGDzktdQ",
-    authDomain: "timbermusic-f2347.firebaseapp.com",
-    databaseURL: "https://timbermusic-f2347.firebaseio.com",
-    projectId: "timbermusic-f2347",
-    storageBucket: "timbermusic-f2347.appspot.com",
-    messagingSenderId: "469843222315",
-    appId: "1:469843222315:web:931de081fc8434230f2f6e",
-    measurementId: "G-MCV853TYLN",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
  
 class Firebase {
