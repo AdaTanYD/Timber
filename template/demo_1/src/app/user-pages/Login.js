@@ -1,9 +1,47 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
+import * as ROUTES from '../../constants/routes';
+import {withFirebase } from '../Firebase';
+import {withAuthUser} from '../Session';
+
+const INITIAL_STATE = {
+  email: '',
+  password: '',
+  error: null,
+};
 
 export class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { ...INITIAL_STATE };
+    console.log(props)
+  }
+
+  onSubmit = event => {
+    const { email, password } = this.state;
+    this.props.firebase
+      .doSignInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.HOME);
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
+      
+    event.preventDefault();
+    
+  }
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+  
   render() {
+    const { email, password, error } = this.state;
+    const isInvalid = password === '' || email === '';
+
     return (
       <div>
         <div className="d-flex align-items-center auth px-0">
@@ -17,14 +55,15 @@ export class Login extends Component {
                 <h6 className="font-weight-light">Sign in to continue.</h6>
                 <Form className="pt-3">
                   <Form.Group className="d-flex search-field">
-                    <Form.Control type="email" placeholder="Username" size="lg" className="h-auto" />
+                    <Form.Control type="email" placeholder="Email" size="lg" value={email} className="h-auto" onChange={this.onChange} name="email"/>
                   </Form.Group>
                   <Form.Group className="d-flex search-field">
-                    <Form.Control type="password" placeholder="Password" size="lg" className="h-auto" />
+                    <Form.Control type="password" placeholder="Password" size="lg" value={password} className="h-auto" onChange={this.onChange} name="password"/>
                   </Form.Group>
                   <div className="mt-3">
-                    <Link className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" to="/dashboard">SIGN IN</Link>
+                    <button disabled={isInvalid} onClick={this.onSubmit} className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" to="/dashboard">SIGN IN</button>
                   </div>
+                  {error && <p>{error.message}</p>}
                   <div className="my-2 d-flex justify-content-between align-items-center">
                     <div className="form-check">
                       <label className="form-check-label text-muted">
@@ -53,4 +92,6 @@ export class Login extends Component {
   }
 }
 
-export default Login
+const LoginPage = withFirebase(withAuthUser(Login))
+
+export default LoginPage

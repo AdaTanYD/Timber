@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import { Trans } from 'react-i18next';
+import * as ROUTES from '../../constants/routes';
 
 class Sidebar extends Component {
 
@@ -149,7 +150,7 @@ class Sidebar extends Component {
             <Collapse in={ this.state.userPagesMenuOpen }>
               <ul className="nav flex-column sub-menu">
                 <li className="nav-item"> <Link className={ this.isPathActive('/user-pages/login-1') ? 'nav-link active' : 'nav-link' } to="/user-pages/login-1"><Trans>Login</Trans></Link></li>
-                <li className="nav-item"> <Link className={ this.isPathActive('/user-pages/register-1') ? 'nav-link active' : 'nav-link' } to="/user-pages/register-1"><Trans>Register</Trans></Link></li>
+                <li className="nav-item"> <Link className={ this.isPathActive(ROUTES.SIGN_UP) ? 'nav-link active' : 'nav-link' } to={ROUTES.SIGN_UP}><Trans>Register</Trans></Link></li>
                 <li className="nav-item"> <Link className={ this.isPathActive('/user-pages/lockscreen') ? 'nav-link active' : 'nav-link' } to="/user-pages/lockscreen"><Trans>Lockscreen</Trans></Link></li>
               </ul>
             </Collapse>
@@ -175,7 +176,8 @@ class Sidebar extends Component {
             </div>
             <Collapse in={ this.state.generalPagesMenuOpen }>
               <ul className="nav flex-column sub-menu">
-                <li className="nav-item"> <Link className={ this.isPathActive('/general-pages/blank-page') ? 'nav-link active' : 'nav-link' } to="/general-pages/blank-page"><Trans>Blank Page</Trans></Link></li>
+                <li className="nav-item"> <Link className={ this.isPathActive(ROUTES.CREATE_POST) ? 'nav-link active' : 'nav-link' } to={ROUTES.CREATE_POST}><Trans>Create Post</Trans></Link></li>
+                <li className="nav-item"> <Link className={ this.isPathActive(ROUTES.EDIT_PROFILE) ? 'nav-link active' : 'nav-link' } to={ROUTES.EDIT_PROFILE}><Trans>Edit Profile</Trans></Link></li>
               </ul>
             </Collapse>
           </li>

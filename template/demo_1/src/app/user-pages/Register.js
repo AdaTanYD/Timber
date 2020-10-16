@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { FirebaseContext } from '../Firebase';
-
-
-const SignUpPage = () => (
-  <FirebaseContext.Consumer>
-    {firebase => { return <Register firebase={firebase} /> }}
-  </FirebaseContext.Consumer>
-);
+import {withFirebase } from '../Firebase';
+import * as ROUTES from '../../constants/routes';
 
 const INITIAL_STATE = {
   username: '',
@@ -21,21 +15,28 @@ export class Register extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = { ...INITIAL_STATE };
   }
 
   onSubmit = event => {
     const { username, email, passwordOne } = this.state;
-
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
+      .then(authUser => {
+        // Create a user in your Firebase realtime database
+        return this.props.firebase
+          .user(authUser.user.uid)
+          .set({
+            username,
+            email,
+          });
+      })
       .then(() => {
         this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.SIGN_IN);
       })
       .catch(error => {
         this.setState({ error });
-        console.log(error)
       });
 
     event.preventDefault();
@@ -111,5 +112,7 @@ export class Register extends Component {
     )
   }
 }
+
+const SignUpPage = withFirebase(Register)
 
 export default SignUpPage

@@ -2,10 +2,9 @@ import React, { Component,Suspense, lazy } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Spinner from '../app/shared/Spinner';
+import * as ROUTES from '../constants/routes';
 
 const Dashboard = lazy(() => import('./dashboard/Dashboard'));
-
-
 
 const Buttons = lazy(() => import('./basic-ui/Buttons'));
 const Dropdowns = lazy(() => import('./basic-ui/Dropdowns'));
@@ -31,7 +30,8 @@ const Register1 = lazy(() => import('./user-pages/Register'));
 const Lockscreen = lazy(() => import('./user-pages/Lockscreen'));
 
 const BlankPage = lazy(() => import('./general-pages/BlankPage'));
-
+const CreatePostPage = lazy(() => import('./CreatePosts/postForm'));
+const EditUserProfile = lazy(() => import('./UserProfile/editUserProfile'));
 
 
 
@@ -60,15 +60,16 @@ class AppRoutes extends Component {
 
 
           <Route path="/user-pages/login-1" component={ Login } />
-          <Route path="/user-pages/register-1" component={ Register1 } />
+          <Route path={ROUTES.SIGN_UP} component={ Register1 } />
           <Route path="/user-pages/lockscreen" component={ Lockscreen } />
 
           <Route path="/error-pages/error-404" component={ Error404 } />
           <Route path="/error-pages/error-500" component={ Error500 } />
 
           <Route path="/general-pages/blank-page" component={ BlankPage } />
-
-
+          <Route path={ROUTES.CREATE_POST} component={CreatePostPage} />
+          <Route path={ROUTES.EDIT_PROFILE} component={EditUserProfile} />
+          
           <Redirect to="/dashboard" />
         </Switch>
       </Suspense>
