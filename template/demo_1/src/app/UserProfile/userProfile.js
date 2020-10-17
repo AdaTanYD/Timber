@@ -3,6 +3,8 @@ import { Form } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
 import { withFirebase } from '../Firebase';
 import ButtonOptions from '../CommonElements/buttonOptions';
+import ButtonDisplays from '../CommonElements/buttonDisplays';
+import Image from 'react-bootstrap/Image'
 
 const instrumentOptions =
     [{ "option": 'Electric Guitar', "icon": "mdi mdi-guitar-electric btn-icon-prepend mdi-24px" },
@@ -50,45 +52,53 @@ const INITIAL_STATE = {
 };
 
 
-export class EditUserProfile extends Component {
+export class UserProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
             users: {},
+            username: "",
             ...INITIAL_STATE,
-          };
+        };
     }
 
     componentDidMount() {
         this.setState({ loading: true });
         var userID = null;
-        this.props.firebase.auth.onAuthStateChanged(function(user) {
+        console.log(this.props)
+        this.props.firebase.auth.onAuthStateChanged(function (user) {
             if (user) {
                 userID = user.uid;
             } else {
-              console.log("please sign in")
+                console.log("please sign in")
             }
-          });
-          this.props.firebase.users().on('value', snapshot => {
-            this.setState({
-            selectedInstruments: snapshot.child(userID).child("selectedInstruments").val(),
-            selectedGenres: snapshot.child(userID).child("selectedGenres").val(),
-            loading: false,
-          });
         });
-      }
-    
+
+        this.props.firebase.users().on('value', snapshot => {
+            var userUID = this.props.match.params.uid;
+            if (snapshot.hasChild(userUID)){
+                userID = userUID
+            }
+            this.setState({
+                selectedInstruments: snapshot.child(userID).child("selectedInstruments").val(),
+                selectedGenres: snapshot.child(userID).child("selectedGenres").val(),
+                username: snapshot.child(userID).child("username").val(),
+                loading: false,
+            });
+        });
+    }
+
 
     onSubmit = () => {
         var user = this.props.firebase.auth.currentUser.uid
-        const { selectedInstruments, selectedGenres} = this.state;
+        const { selectedInstruments, selectedGenres } = this.state;
         this.props.firebase
-          .user(user)
-          .update({
-            selectedInstruments,
-            selectedGenres,
-          });
+            .user(user)
+            .update({
+                selectedInstruments,
+                selectedGenres,
+            });
     }
 
     onSelectInstrument = (selectedInstruments) => {
@@ -109,22 +119,28 @@ export class EditUserProfile extends Component {
                                 <div className="brand-logo">
                                     <img src={require("../../assets/images/logo.svg")} alt="logo" />
                                 </div>
-                                <h4>Edit your profile</h4>
+                                <div className="d-flex align-items-center flex-row" style={{ marginBottom: 24 }}>
+                                    <div className="p-2">
+                                        <Image src={require("../../assets/images/faces/face1.jpg")} alt="profile" roundedCircle />
+                                    </div>
+                                    <div className="p-2 l-56">
+                                        <h3>
+                                            {this.state.username}
+                                        </h3>
+                                        <h6 className="font-weight-light">
+                                            Contact email, phone number blah
+                                        </h6>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 className="font-weight-light">BIO chunk here</h5>
+                                </div>
+
                                 <Form className="pt-3">
-                                    <h5>Basic Information</h5>
-                                    <span />
-                                    <h6 className="font-weight-light">What instrument(s) do you play?</h6>
-                                    <ButtonOptions optionsList={instrumentOptions} onChange={this.onSelectInstrument} selectedList={this.state.selectedInstruments} />
+                                    <h6 className="font-weight-light">Instrument(s)</h6>
+                                    <ButtonDisplays displayList={this.state.selectedInstruments} />
                                     <h6 className="font-weight-light">Preferred genres</h6>
-                                    <ButtonOptions optionsList={preferredGenreOptions} onChange={this.onSelectGenre} selectedList={this.state.selectedGenres} />
-                                    <h6 className="font-weight-light">Biography</h6>
-                                    <Form.Group className="d-flex search-field">
-                                        <Form.Control as="textarea" rows="2" placeholder="Describe yourself!" size="lg" className="h-auto" onChange={this.onChange} name="biography" />
-                                    </Form.Group>
-                                    <h6 className="font-weight-light">Contact details</h6>
-                                    <Form.Group className="d-flex search-field">
-                                        <Form.Control as="textarea" rows="1" placeholder="Contact" size="lg" className="h-auto" onChange={this.onChange} name="spotify link" />
-                                    </Form.Group>
+                                    <ButtonDisplays displayList={this.state.selectedGenres} />
                                     <h5>Skills Level</h5>
                                     <h6 className="font-weight-light">What level would you describe yourself to be?</h6>
                                     <ButtonOptions optionsList={skillOptions} />
@@ -152,7 +168,7 @@ export class EditUserProfile extends Component {
                                     <Form.Group className="d-flex search-field">
                                         <Form.Control as="textarea" rows="1" placeholder="Youtube link" size="lg" className="h-auto" onChange={this.onChange} name="youtube link" />
                                     </Form.Group>
-                                   
+
                                     <div className="mt-3">
                                         <button onClick={this.onSubmit} type="button" className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SAVE</button>
                                     </div>
@@ -166,4 +182,4 @@ export class EditUserProfile extends Component {
     }
 }
 
-export default withFirebase(EditUserProfile);
+export default withFirebase(UserProfile);

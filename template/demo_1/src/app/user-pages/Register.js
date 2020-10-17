@@ -29,6 +29,8 @@ export class Register extends Component {
           .set({
             username,
             email,
+            selectedInstruments: [],
+            selectedGenres: [],
           });
       })
       .then(() => {

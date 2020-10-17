@@ -178,6 +178,7 @@ class Sidebar extends Component {
               <ul className="nav flex-column sub-menu">
                 <li className="nav-item"> <Link className={ this.isPathActive(ROUTES.CREATE_POST) ? 'nav-link active' : 'nav-link' } to={ROUTES.CREATE_POST}><Trans>Create Post</Trans></Link></li>
                 <li className="nav-item"> <Link className={ this.isPathActive(ROUTES.EDIT_PROFILE) ? 'nav-link active' : 'nav-link' } to={ROUTES.EDIT_PROFILE}><Trans>Edit Profile</Trans></Link></li>
+                <li className="nav-item"> <Link className={ this.isPathActive(ROUTES.USER_PROFILE) ? 'nav-link active' : 'nav-link' } to={ROUTES.USER_PROFILE}><Trans>User Profile</Trans></Link></li>
               </ul>
             </Collapse>
           </li>

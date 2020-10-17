@@ -32,7 +32,7 @@ const Lockscreen = lazy(() => import('./user-pages/Lockscreen'));
 const BlankPage = lazy(() => import('./general-pages/BlankPage'));
 const CreatePostPage = lazy(() => import('./CreatePosts/postForm'));
 const EditUserProfile = lazy(() => import('./UserProfile/editUserProfile'));
-
+const UserProfile = lazy(() => import('./UserProfile/userProfile'));
 
 
 class AppRoutes extends Component {
@@ -69,6 +69,7 @@ class AppRoutes extends Component {
           <Route path="/general-pages/blank-page" component={ BlankPage } />
           <Route path={ROUTES.CREATE_POST} component={CreatePostPage} />
           <Route path={ROUTES.EDIT_PROFILE} component={EditUserProfile} />
+          <Route path={ROUTES.USER_PROFILE} component={UserProfile}/>
           
           <Redirect to="/dashboard" />
         </Switch>
