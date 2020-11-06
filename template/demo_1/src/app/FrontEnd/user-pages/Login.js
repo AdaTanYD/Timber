@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import * as ROUTES from '../../constants/routes';
-import {withFirebase } from '../Firebase';
-import {withAuthUser} from '../Session';
+import {withFirebase } from '../../BackEnd/Firebase';
+import {withAuthUser} from '../../BackEnd/Session';
 
 const INITIAL_STATE = {
   email: '',
@@ -49,7 +49,7 @@ export class Login extends Component {
             <div className="col-lg-4 mx-auto">
               <div className="auth-form-light text-left py-5 px-4 px-sm-5">
                 <div className="brand-logo">
-                  <img src={require("../../assets/images/logo.svg")} alt="logo" />
+                  <img src={require("../../../assets/images/logo.svg")} alt="logo" />
                 </div>
                 <h4>Hello! let's get started</h4>
                 <h6 className="font-weight-light">Sign in to continue.</h6>
@@ -80,7 +80,7 @@ export class Login extends Component {
                     </button>
                   </div>
                   <div className="text-center mt-4 font-weight-light">
-                    Don't have an account? <Link to="/user-pages/register" className="text-primary">Create</Link>
+                    Don't have an account? <Link to={ROUTES.SIGN_UP} className="text-primary">Create</Link>
                   </div>
                 </Form>
               </div>

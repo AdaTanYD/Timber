@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {withFirebase } from '../Firebase';
+import {withFirebase } from '../../BackEnd/Firebase';
 import * as ROUTES from '../../constants/routes';
 
 const INITIAL_STATE = {
@@ -31,6 +31,19 @@ export class Register extends Component {
             email,
             selectedInstruments: [],
             selectedGenres: [],
+            biography: '',
+            phoneNumber: '',
+            telegramHandle: '',
+            skillsLevel: '',
+            performanceExperience: '',
+            playingLength: '',
+            topFiveArtistOne: '',
+            topFiveArtistTwo: '',
+            topFiveArtistThree: '',
+            topFiveArtistFour: '',
+            topFiveArtistFive: '',
+            spotifyPlaylist: '',
+            youtubeLink: '',
           });
       })
       .then(() => {
@@ -70,7 +83,7 @@ export class Register extends Component {
             <div className="col-lg-4 mx-auto">
               <div className="auth-form-light text-left py-5 px-4 px-sm-5">
                 <div className="brand-logo">
-                  <img src={require("../../assets/images/logo.svg")} alt="logo" />
+                  <img src={require("../../../assets/images/logo.svg")} alt="logo" />
                 </div>
                 <h4>New here?</h4>
                 <h6 className="font-weight-light">Signing up is easy. It only takes a few steps</h6>
@@ -103,7 +116,7 @@ export class Register extends Component {
                     {error && <p>{error.message}</p>}
                   </div>
                   <div className="text-center mt-4 font-weight-light">
-                    Already have an account? <Link to="/user-pages/login" className="text-primary">Login</Link>
+                    Already have an account? <Link to={ROUTES.SIGN_IN} className="text-primary">Login</Link>
                   </div>
                 </form>
               </div>

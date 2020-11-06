@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import  { FirebaseContext } from '../Firebase';
+import  { FirebaseContext } from '../../BackEnd/Firebase';
 
 export class BlankPage extends Component {
   render() {

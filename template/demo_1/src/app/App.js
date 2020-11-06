@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import './App.scss';
 import AppRoutes from './AppRoutes';
-import Navbar from './shared/Navbar';
-import Sidebar from './shared/Sidebar';
-import SettingsPanel from './shared/SettingsPanel';
-import Footer from './shared/Footer';
-import { withTranslation } from "react-i18next";
-import * as ROUTES from '../constants/routes';
-import { withAuthentication } from './Session';
+import Navbar from './FrontEnd/shared/NavBar/Navbar';
+import Sidebar from './FrontEnd/shared/SideBar/Sidebar';
+import SettingsPanel from './FrontEnd/shared/SettingsPanel';
+import Footer from './FrontEnd/shared/Footer';
+import * as ROUTES from './constants/routes';
+import {withFirebase} from './BackEnd/Firebase';
 
 class App extends Component {
-  state = {}
+  state = {
+    authUser: null,
+  }
   componentDidMount() {
     this.onRouteChanged();
+    this.props.firebase.auth.onAuthStateChanged(authUser => {
+      authUser
+        ? this.setState({ authUser })
+        : this.setState({ authUser: null });
+    });
   }
 
   render () {
-    let navbarComponent = !this.state.isFullPageLayout ? <Navbar/> : '';
-    let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar/> : '';
+    let navbarComponent = !this.state.isFullPageLayout ? <Navbar authUser={this.state.authUser}/> : '';
+    let sidebarComponent = !this.state.isFullPageLayout ? <Sidebar authUser={this.state.authUser}/> : '';
     let SettingsPanelComponent = !this.state.isFullPageLayout ? <SettingsPanel/> : '';
     let footerComponent = !this.state.isFullPageLayout ? <Footer/> : '';
     return (
@@ -30,6 +36,8 @@ class App extends Component {
             <div className="content-wrapper">
               <AppRoutes/>
               { SettingsPanelComponent }
+              {console.log(this.state.authUser)}
+              {/* {this.state.authUser === null ? <Redirect to={ROUTES.SIGN_IN}/> : null} */}
             </div>
             { footerComponent }
           </div>
@@ -45,19 +53,8 @@ class App extends Component {
   }
 
   onRouteChanged() {
-    console.log("ROUTE CHANGED");
-    const { i18n } = this.props;
-    const body = document.querySelector('body');
-    if(this.props.location.pathname === '/layout/RtlLayout') {
-      body.classList.add('rtl');
-      i18n.changeLanguage('ar');
-    }
-    else {
-      body.classList.remove('rtl')
-      i18n.changeLanguage('en');
-    }
     window.scrollTo(0, 0);
-    const fullPageLayoutRoutes = [ROUTES.SIGN_UP, '/user-pages/login-1', '/user-pages/register-1', '/user-pages/lockscreen', '/error-pages/error-404', '/error-pages/error-500', '/general-pages/landing-page'];
+    const fullPageLayoutRoutes = [ROUTES.SIGN_UP, ROUTES.SIGN_IN, '/error-pages/error-404', '/error-pages/error-500', '/general-pages/landing-page'];
     for ( let i = 0; i < fullPageLayoutRoutes.length; i++ ) {
       if (this.props.location.pathname === fullPageLayoutRoutes[i]) {
         this.setState({
@@ -76,4 +73,4 @@ class App extends Component {
 
 }
 
-export default withTranslation() (withRouter(withAuthentication(App)));
+export default(withRouter(withFirebase((App))));

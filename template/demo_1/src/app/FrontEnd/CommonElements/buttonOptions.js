@@ -9,7 +9,7 @@ export class ButtonOptions extends Component {
     }
 
     onClick = event => {
-        if (this.props.selectedList === null) {
+        if (this.props.selectedList === null || this.props.selectedList === undefined) {
             this.props.onChange([event.target.value]);
         }
         else {
@@ -17,7 +17,7 @@ export class ButtonOptions extends Component {
                 this.props.onChange(this.props.selectedList.filter((selectedOption) => selectedOption !== event.target.value))
             }
             else {
-                this.props.onChange([... this.props.selectedList, event.target.value])
+                this.props.onChange(this.props.multiSelect ? [... this.props.selectedList, event.target.value] : event.target.value)
             }
         }
     };
