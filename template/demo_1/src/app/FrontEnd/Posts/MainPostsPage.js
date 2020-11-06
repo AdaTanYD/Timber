@@ -32,7 +32,7 @@ export class MainPostPage extends Component {
                     :
                     <div className="d-flex align-items-left auth px-0 flex-wrap">
                         {this.state.posts ?
-                            Object.keys(this.state.posts).map((key) => <Post key={key} details={this.state.posts[key]} postID={key} />)
+                            Object.keys(this.state.posts).reverse().map((key) => <Post key={key} details={this.state.posts[key]} postID={key} />)
                             :
                             null
                         }

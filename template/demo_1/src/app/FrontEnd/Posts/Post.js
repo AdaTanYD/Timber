@@ -3,7 +3,7 @@ import { withFirebase } from '../../BackEnd/Firebase';
 import Image from 'react-bootstrap/Image';
 import InstrumentIcon from './instrumentIcon';
 import JoinModal from './joinModal';
-
+import BandIcon from './bandIcon';
 
 
 export class Post extends Component {
@@ -76,10 +76,7 @@ export class Post extends Component {
                     <h6 className="font-weight-light">
                         Looking for:
                             <div className="d-flex align-items-left auth px-0 flex-wrap">
-                            {this.props.details.selectedInstruments.map(
-                                (instrument) =>
-                                    <InstrumentIcon instrument={instrument} />
-                            )}
+                            <BandIcon postID={this.props.postID} selectedInstruments={this.props.details.selectedInstruments}/>
                         </div>
                     </h6>
                     : null}

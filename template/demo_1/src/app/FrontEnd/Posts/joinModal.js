@@ -15,6 +15,7 @@ const instrumentOptions =
     { "option": 'Vocals', "icon": "mdi mdi-microphone-variant btn-icon-prepend mdi-24px" },
     { "option": 'Others', "icon": "mdi mdi-saxophone btn-icon-prepend mdi-24px" }
     ];
+    
 function getCurrentUser(auth) {
     return new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged(user => {
@@ -61,6 +62,7 @@ function JoinModal(props) {
             }
             );
     }
+    
     return (
         <>
         {show ? 

@@ -10,7 +10,7 @@ function JoinRequests(props) {
                 <h4>
                 Join Requests
                 </h4>
-                    {Object.keys(props.interestedList).map((key) => <JoinRequest key={key} details={props.interestedList[key]} postID={key} />)}
+                    {Object.keys(props.interestedList).map((key) => <JoinRequest key={key} details={props.interestedList[key]} requestID={key} postID={props.postID} />)}
                 </>
                 : null
             }

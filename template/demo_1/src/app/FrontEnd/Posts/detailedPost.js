@@ -6,6 +6,7 @@ import Image from 'react-bootstrap/Image'
 import InstrumentIcon from './instrumentIcon';
 import JoinModal from './joinModal';
 import JoinRequests from './JoinRequests/joinRequests';
+import BandIcon from './bandIcon';
 
 const INITIAL_STATE = {
     owner: null,
@@ -41,6 +42,10 @@ export class DetailedPost extends Component {
         };
     }
 
+    setJoinModalShow(show) {
+        this.setState({ joinModalShow: show });
+    }
+    
     async componentDidMount() {
         this.setState({ loading: true });
         var currentUser = await getCurrentUser(this.props.firebase.auth);
@@ -131,10 +136,7 @@ export class DetailedPost extends Component {
                                             <h6 className="font-weight-light">
                                                 Looking for:
                                             <div className="d-flex align-items-left auth px-0 flex-wrap">
-                                                    {this.state.selectedInstruments.map(
-                                                        (instrument) =>
-                                                            <InstrumentIcon instrument={instrument} diameter={70} />
-                                                    )}
+                                                    <BandIcon postID={this.state.postID} diameter={70} selectedInstruments={this.state.selectedInstruments}/>
                                                 </div>
                                             </h6>
                                             : null}
@@ -161,7 +163,7 @@ export class DetailedPost extends Component {
                                         {
                                             this.state.isCurrentUser && this.state.interestedList ?
                                                 <div>
-                                                    <JoinRequests interestedList={this.state.interestedList} />
+                                                    <JoinRequests interestedList={this.state.interestedList} postID={this.state.postID} />
                                                 </div>
                                                 :
                                                 <div className="mt-3">
