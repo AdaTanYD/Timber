@@ -15,6 +15,8 @@ const CreatePostPage = lazy(() => import('./FrontEnd/Posts/CreatePosts/postForm'
 const PostListingsPage = lazy(() => import('./FrontEnd/Posts/MainPostsPage'));
 const DetailedPost = lazy(() => import('./FrontEnd/Posts/detailedPost'));
 
+const UserPostsPage = lazy(() => import('./FrontEnd/Posts/UserPostsPage'));
+
 const EditUserProfile = lazy(() => import('./FrontEnd/UserProfile/editUserProfile'));
 const UserProfile = lazy(() => import('./FrontEnd/UserProfile/userProfile'));
 
@@ -35,6 +37,8 @@ class AppRoutes extends Component {
           <Route path={ROUTES.CREATE_POST} component={CreatePostPage} />
           <Route path={ROUTES.POST_LISTINGS} component={PostListingsPage} />
           <Route path={ROUTES.DETAILED_POST} component={DetailedPost} />
+
+          <Route path={ROUTES.USER_POSTS} component={UserPostsPage} />
 
           <Route path={ROUTES.EDIT_PROFILE} component={EditUserProfile} />
           <Route path={ROUTES.USER_PROFILE} component={UserProfile}/>

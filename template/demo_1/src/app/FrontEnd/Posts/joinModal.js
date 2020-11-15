@@ -62,7 +62,6 @@ function JoinModal(props) {
             }
             );
     }
-    
     return (
         <>
         {show ? 
@@ -96,6 +95,8 @@ function JoinModal(props) {
             <ConfirmationModal
                 show={confirmationModalShow}
                 onHide={() => setConfirmationModalShow(false)}
+                title="Success"
+                body="Request sent!"
             />
         </>
     );

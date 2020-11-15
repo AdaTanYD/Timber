@@ -13,11 +13,11 @@ function ConfirmationModal(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Success
+                    {props.title}
           </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h6 className="font-weight-light">Request sent!</h6>
+                <h6 className="font-weight-light">{props.body}</h6>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>

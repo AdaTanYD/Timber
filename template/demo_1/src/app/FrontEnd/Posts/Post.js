@@ -5,6 +5,14 @@ import InstrumentIcon from './instrumentIcon';
 import JoinModal from './joinModal';
 import BandIcon from './bandIcon';
 
+function getCurrentUser(auth) {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            unsubscribe();
+            resolve(user);
+        }, reject);
+    });
+}
 
 export class Post extends Component {
     constructor(props) {
@@ -13,6 +21,7 @@ export class Post extends Component {
             loading: true,
             ownerUsername: "",
             ownerInstruments: [],
+            currentUserID: null,
             joinModalShow: false,
         };
     }
@@ -23,11 +32,14 @@ export class Post extends Component {
         })
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        var currentUser = await getCurrentUser(this.props.firebase.auth);
+        var currentUserID = currentUser.uid
         this.props.firebase.users().on('value', snapshot => {
             this.setState({
                 ownerUsername: snapshot.child(this.props.details.owner).child("username").val(),
                 ownerInstruments: snapshot.child(this.props.details.owner).child("selectedInstruments").val(),
+                currentUserID: currentUserID,
                 loading: false,
             });
         });
@@ -76,22 +88,27 @@ export class Post extends Component {
                     <h6 className="font-weight-light">
                         Looking for:
                             <div className="d-flex align-items-left auth px-0 flex-wrap">
-                            <BandIcon postID={this.props.postID} selectedInstruments={this.props.details.selectedInstruments}/>
+                            <BandIcon postID={this.props.postID} selectedInstruments={this.props.details.selectedInstruments} />
                         </div>
                     </h6>
                     : null}
                 <div style={{ position: 'absolute', bottom: '12px', left: '12px' }}>
                     <a href={`/post/${this.props.postID}`} className="font-weight-light" style={{ fontSize: 14 }}>read more</a>
                 </div>
-                <div style={{ position: 'absolute', bottom: '12px', right: '12px' }}>
-                    <button className="btn btn-block btn-primary btn-sm font-weight-light auth-form-btn" to="/dashboard" onClick={()=>{this.setJoinModalShow(true)}}>+ Join</button>
-                </div>
-                <JoinModal
-                    show={this.state.joinModalShow}
-                    onHide={() => this.setJoinModalShow(false)}
-                    post={this.props.details}
-                    postID={this.props.postID}
-                />
+                {this.state.currentUserID !== this.props.details.owner ?
+                    <>
+                        <div style={{ position: 'absolute', bottom: '12px', right: '12px' }}>
+                            <button className="btn btn-block btn-primary btn-sm font-weight-light auth-form-btn" to="/dashboard" onClick={() => { this.setJoinModalShow(true) }}>+ Join</button>
+                        </div>
+                        <JoinModal
+                            show={this.state.joinModalShow}
+                            onHide={() => this.setJoinModalShow(false)}
+                            post={this.props.details}
+                            postID={this.props.postID}
+                        />
+                    </>
+                    :
+                    null}
             </div>
         )
     }

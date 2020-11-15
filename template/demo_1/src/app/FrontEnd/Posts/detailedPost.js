@@ -45,7 +45,7 @@ export class DetailedPost extends Component {
     setJoinModalShow(show) {
         this.setState({ joinModalShow: show });
     }
-    
+
     async componentDidMount() {
         this.setState({ loading: true });
         var currentUser = await getCurrentUser(this.props.firebase.auth);
@@ -64,6 +64,7 @@ export class DetailedPost extends Component {
                     interestedList: snapshot.child(postID).child("interestedList").val(),
                     post: snapshot.child(postID).val(),
                     postID: postID,
+                    isCurrentUser: snapshot.child(postID).child("owner").val() === currentUserID,
                     loading: false,
                 });
                 this.props.firebase.users().on('value', usersSnapshot => {
@@ -72,11 +73,7 @@ export class DetailedPost extends Component {
                         ownerInstruments: usersSnapshot.child(snapshot.child(postID).child("owner").val()).child("selectedInstruments").val(),
                     })
                 })
-                if (snapshot.child(postID).child("owner").val() === currentUserID) {
-                    this.setState({
-                        isCurrentUser: true
-                    })
-                }
+
             }
             else {
                 this.props.history.push(ROUTES.EDIT_PROFILE)
@@ -136,7 +133,7 @@ export class DetailedPost extends Component {
                                             <h6 className="font-weight-light">
                                                 Looking for:
                                             <div className="d-flex align-items-left auth px-0 flex-wrap">
-                                                    <BandIcon postID={this.state.postID} diameter={70} selectedInstruments={this.state.selectedInstruments}/>
+                                                    <BandIcon postID={this.state.postID} diameter={70} selectedInstruments={this.state.selectedInstruments} />
                                                 </div>
                                             </h6>
                                             : null}
@@ -161,16 +158,21 @@ export class DetailedPost extends Component {
                                             }
                                         </div >
                                         {
-                                            this.state.isCurrentUser && this.state.interestedList ?
-                                                <div>
-                                                    <JoinRequests interestedList={this.state.interestedList} postID={this.state.postID} />
-                                                </div>
+                                            this.state.isCurrentUser
+                                                ?
+                                                this.state.interestedList ?
+                                                    <div>
+                                                        <JoinRequests interestedList={this.state.interestedList} postID={this.state.postID} />
+                                                    </div>
+                                                    :
+                                                    <h3>
+                                                        You have no join requests yet
+                                                    </h3>
                                                 :
                                                 <div className="mt-3">
                                                     <button type="button" onClick={() => this.setState({ joinModalShow: true })} className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" to="/dashboard">+ Join</button>
                                                 </div>
                                         }
-
                                     </Form>
                                     <JoinModal
                                         show={this.state.joinModalShow}

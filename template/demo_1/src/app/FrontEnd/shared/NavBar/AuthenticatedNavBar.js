@@ -53,6 +53,10 @@ class AuthenticatedNavbar extends Component {
                                 <i className="mdi mdi-cached mr-2 text-success"></i>
                                 <Trans>User Profile</Trans>
                             </Dropdown.Item>
+                            <Dropdown.Item href={ROUTES.USER_POSTS}>
+                                <i className="mdi mdi-cached mr-2 text-success"></i>
+                                <Trans>My Posts</Trans>
+                            </Dropdown.Item>
                             <Dropdown.Item href="!#" onClick={event => this.onSignOut(event)}>
                                 <i className="mdi mdi-logout mr-2 text-primary"></i>
                                 <Trans>Signout</Trans>

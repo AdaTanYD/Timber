@@ -17,10 +17,12 @@ function BandIcon(props) {
         var list = props.selectedInstruments
         if (acceptedList !== null) {
             Object.keys(acceptedList).map((key) => {
-                list = list.filter(instrument => acceptedList[key]["joinInstrument"] !== instrument)
+                list = list.filter(instrument => {
+                    return acceptedList[key]["joinInstrument"] != instrument})
             })
             return list
         }
+
         return list
     }, [acceptedList, props.selectedInstruments])
 
@@ -48,7 +50,7 @@ function BandIcon(props) {
             {instrumentList ?
                 instrumentList.map(
                     (instrument) =>
-                        <InstrumentIcon instrument={instrument} diameter={props.diameter ? props.diameter : 50} />
+                        <InstrumentIcon key={instrument} instrument={instrument} diameter={props.diameter ? props.diameter : 50} />
                 )
                 : null}
         </div>

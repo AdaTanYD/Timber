@@ -1,68 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { withFirebase } from '../../../BackEnd/Firebase';
 import Image from 'react-bootstrap/Image'
+import AcceptModal from './acceptModal';
+import DeclineModal from './declineModal';
 
 function JoinRequest(props) {
     const [username, setUsername] = useState(null);
+    const [showAcceptModal, setShowAcceptModal] = useState(false);
+    const [showDeclineModal, setShowDeclineModal] = useState(false);
 
-    async function checkInstrumentTaken(instrument) {
-        var result = false
-        await props.firebase.posts().on('value', snapshot => {
-            const acceptedList = snapshot.child(props.postID).child("acceptedList").val()
-            
-            if (acceptedList === null) {
-                return false
-            }
-            
-            Object.keys(acceptedList).map((key) => {
-                if (acceptedList[key]["joinInstrument"].includes(instrument)) {
-                    result = true
-                }
-            })
-        })
-        return result
-    }
-    async function acceptRequest() {
-        var joinData = {
-            user: props.details.user,
-            joinInstrument: props.details.joinInstrument,
-            joinComment: props.details.joinComment,
-        }
-        console.log("this is the awaited thing")
-        console.log(await checkInstrumentTaken(props.details.joinInstrument[0]))
-        if (await checkInstrumentTaken(props.details.joinInstrument[0])) {
-            // instrument already taken, insert some modal to ask user to delete and kick
-            console.log("instrument already taken");
-        }
-        
-        else {
-            //add to accepted list
-            await props.firebase
-                .post(props.postID).child("acceptedList")
-                .push(joinData).then(() => {
-                    console.log(joinData)
-                }
-                );
-            await props.firebase.post(props.postID).child("interestedList").child(props.requestID).remove();
-        }
-    }
-
-    async function declineRequest() {
-        var joinData = {
-            user: props.details.user,
-            joinInstrument: props.details.joinInstrument,
-            joinComment: props.details.joinComment,
-        }
-        //add to decline list
-        await props.firebase
-            .post(props.postID).child("declinedList")
-            .push(joinData).then(() => {
-                console.log(joinData)
-            }
-            );
-        await props.firebase.post(props.postID).child("interestedList").child(props.requestID).remove();
-
-    }
     useEffect(() => {
         props.firebase.users().on('value', usersSnapshot => {
             setUsername(usersSnapshot.child(props.details.user).child('username').val())
@@ -96,11 +42,25 @@ function JoinRequest(props) {
                 </div>
                 <div className="d-flex align-items-center flex-row" >
 
-                    <button type="button" onClick={acceptRequest} className="btn btn-block btn-success btn-sm font-weight-medium auth-form-btn" >Accept</button>
+                    <button type="button" onClick={() => setShowAcceptModal(true)} className="btn btn-block btn-success btn-sm font-weight-medium auth-form-btn" >Accept</button>
                     <div className="mx-20">
                     </div>
-                    <button type="button" onClick={declineRequest} className="btn btn-block btn-danger btn-sm font-weight-medium auth-form-btn">Decline</button>
+                    <button type="button" onClick={() => setShowDeclineModal(true)} className="btn btn-block btn-danger btn-sm font-weight-medium auth-form-btn">Decline</button>
                 </div>
+                <AcceptModal
+                    show={showAcceptModal}
+                    onHide={() => setShowAcceptModal(false)}
+                    details={props.details}
+                    postID={props.postID}
+                    requestID={props.requestID}
+                />
+                <DeclineModal
+                    show={showDeclineModal}
+                    onHide={() => setShowDeclineModal(false)}
+                    details={props.details}
+                    postID={props.postID}
+                    requestID={props.requestID}
+                />
             </div>
         </div>
     );
